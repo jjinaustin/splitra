@@ -2,18 +2,22 @@
 const SplMockData = {
   // User profile data
   user: {
-    id: 'user-001',
-    name: 'Demo User',
-    wallet: '0x7A23C4A31C94e7895AC495f3669e4a26C877d9a6',
-    walletShort: '0x7A23...9a6',
-    email: 'demo@splitra.io',
-    avatar: null,
-    balance: 3.45,
-    totalContracts: 12,
-    activeContracts: 7, 
-    activeCollaborators: 18,
-    joinedAt: '2024-12-01T10:00:00Z'
-  },
+  id: 'user-001',
+  name: 'Demo User',
+  wallet: '0x7A23C4A31C94e7895AC495f3669e4a26C877d9a6',
+  walletShort: '0x7A23...9a6',
+  email: 'demo@splitra.io',
+  avatar: null,
+  balance: 3.45,
+  balanceMonthly: 1.2,
+  totalContracts: 12,
+  contractsMonthly: 3,
+  activeContracts: 7, 
+  activeContractsMonthly: 2,
+  activeCollaborators: 18,
+  collaboratorsMonthly: 5,
+  joinedAt: '2024-12-01T10:00:00Z'
+},
   
   // Contracts
   contracts: [
