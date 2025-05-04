@@ -1,80 +1,52 @@
-// Combined Splitra Dashboard Script - Stats Only
-document.addEventListener('DOMContentLoaded', function() {
-  console.log('Combined Splitra Script Running');
-  
-  // Mock data
-  const mockData = {
-    user: {
-      balance: 3.45,
-      totalContracts: 12,
-      activeContracts: 7,
-      activeCollaborators: 18
-    }
-  };
-  
-  // Format currency function
-  function formatCurrency(value) {
-    return value.toFixed(5) + ' ETH';
-  }
-  
-  // Initialize stats
-  function initializeStats() {
-    console.log('Initializing stats in combined script');
+// Stats component - Balance, Contracts, Collaborators stats
+const SplStats = {
+  // Initialize stats cards
+  initialize: function() {
+    SplUI.log('Initializing stats cards');
     
-    setTimeout(function() {
-      // Balance
-      const balanceElement = document.querySelector('.stat-value-balance');
-      if (balanceElement) {
-        console.log('Found balance element:', balanceElement);
-        balanceElement.textContent = formatCurrency(mockData.user.balance);
-        console.log('Set balance to:', formatCurrency(mockData.user.balance));
-      } else {
-        console.log('Could not find balance element');
-      }
-      
-      // Total contracts
-      const contractsElement = document.querySelector('.stat-value-total');
-      if (contractsElement) {
-        console.log('Found contracts element:', contractsElement);
-        contractsElement.textContent = mockData.user.totalContracts.toString();
-        console.log('Set contracts to:', mockData.user.totalContracts);
-      } else {
-        console.log('Could not find contracts element');
-      }
-      
-      // Active contracts
-      const activeElement = document.querySelector('.stat-value-active');
-      if (activeElement) {
-        console.log('Found active element:', activeElement);
-        activeElement.textContent = mockData.user.activeContracts.toString();
-        console.log('Set active contracts to:', mockData.user.activeContracts);
-      } else {
-        console.log('Could not find active element');
-      }
-      
-      // Collaborators
-      const collabElement = document.querySelector('.stat-value-collab');
-      if (collabElement) {
-        console.log('Found collab element:', collabElement);
-        collabElement.textContent = mockData.user.activeCollaborators.toString();
-        console.log('Set collaborators to:', mockData.user.activeCollaborators);
-      } else {
-        console.log('Could not find collab element');
-      }
-      
-      // Update monthly values
-      const monthlyValue = '1.2 ETH this month.';
-      
-      const balanceMonthElement = document.querySelector('.user-balance-value');
-      if (balanceMonthElement) {
-        balanceMonthElement.textContent = monthlyValue;
-        console.log('Updated balance monthly value');
-      }
-      
-      console.log('Stats initialization complete');
-    }, 500); // Slightly longer timeout
-  }
+    // Wait a short moment to ensure DOM is fully ready
+    setTimeout(() => {
+      // Update stats with mock data
+      this.updateStats();
+    }, 200);
+  },
   
-  // Run initialization
-  initializeStats();
-});
+  // Update stats with mock data
+  updateStats: function() {
+    // Main stat values
+    const statValues = {
+      '.stat-value-balance': SplFormatting.formatCurrency(SplMockData.user.balance),
+      '.stat-value-total': SplMockData.user.totalContracts.toString(),
+      '.stat-value-active': SplMockData.user.activeContracts.toString(),
+      '.stat-value-collab': SplMockData.user.activeCollaborators.toString()
+    };
+    
+    // Bottom stat values (monthly metrics)
+    const monthlyValues = {
+      '.user-balance-value': '+1.2 ETH this month',
+      '.total-contracts-value': '+3 contracts this month',
+      '.active-contracts-value': '+2 activated this month',
+      '.active-collaborators-value': '+5 joined this month'
+    };
+    
+    // Update main stat values
+    Object.entries(statValues).forEach(([selector, value]) => {
+      const element = document.querySelector(selector);
+      if (element) {
+        element.textContent = value;
+        SplUI.log(`Updated ${selector} to ${value}`);
+      }
+    });
+    
+    // Update monthly values
+    Object.entries(monthlyValues).forEach(([selector, value]) => {
+      const element = document.querySelector(selector);
+      if (element) {
+        element.textContent = value;
+        SplUI.log(`Updated ${selector} to ${value}`);
+      }
+    });
+    
+    SplUI.log('All stats updated successfully');
+  }
+};
