@@ -52,12 +52,18 @@ const SplPayments = {
     item.className = 'payment-item';
     item.setAttribute('data-payment-id', payment.id);
     item.style.display = 'flex';
-    item.style.alignItems = 'center';
-    item.style.justifyContent = 'space-between';
+    item.style.flexDirection = 'column';
     item.style.marginBottom = '12px';
     item.style.padding = '12px';
     item.style.borderRadius = '8px';
     item.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+    
+    // Top row with contract info and amount
+    const topRow = document.createElement('div');
+    topRow.style.display = 'flex';
+    topRow.style.justifyContent = 'space-between';
+    topRow.style.alignItems = 'center';
+    topRow.style.marginBottom = '8px';
     
     // Left side - Contract info
     const contractInfo = document.createElement('div');
@@ -84,25 +90,43 @@ const SplPayments = {
     contractName.style.fontWeight = 'bold';
     contractName.textContent = contract.title;
     
-    // Right side - Payment details
-    const paymentDetails = document.createElement('div');
-    paymentDetails.className = 'payment-details';
-    paymentDetails.style.display = 'flex';
-    paymentDetails.style.alignItems = 'center';
-    
-    // Payment amount
+    // Right side - Payment amount
     const amount = document.createElement('div');
     amount.className = 'payment-amount';
     amount.style.fontWeight = 'bold';
-    amount.style.marginRight = '12px';
     amount.textContent = SplFormatting.formatCurrency(payment.amount, payment.currency);
+    
+    // Bottom row with date and progress
+    const bottomRow = document.createElement('div');
+    bottomRow.style.display = 'flex';
+    bottomRow.style.flexDirection = 'column';
+    
+    // Payment info row
+    const infoRow = document.createElement('div');
+    infoRow.style.display = 'flex';
+    infoRow.style.justifyContent = 'space-between';
+    infoRow.style.marginBottom = '4px';
+    
+    // User share
+    const userShare = document.createElement('div');
+    userShare.className = 'payment-share';
+    userShare.style.fontSize = '14px';
+    userShare.style.color = '#888';
+    
+    // Find user's share in the contract
+    const userParticipant = contract.participants.find(p => p.isCurrentUser);
+    if (userParticipant) {
+      userShare.textContent = `Your share: ${userParticipant.revenueShare}%`;
+    } else {
+      userShare.textContent = 'Your share: -';
+    }
     
     // Payment date
     const date = document.createElement('div');
     date.className = 'payment-date';
     date.style.fontSize = '14px';
     date.style.color = '#888';
-    date.textContent = SplFormatting.formatDate(payment.date);
+    date.textContent = `Expected: ${SplFormatting.formatDate(payment.date)}`;
     
     // Progress bar container
     const progressContainer = document.createElement('div');
@@ -127,4 +151,63 @@ const SplPayments = {
     progressBar.style.backgroundColor = '#3B82F6';
     progressBar.style.borderRadius = '2px';
     
-    //
+    // Assemble the payment item
+    contractInfo.appendChild(icon);
+    contractInfo.appendChild(contractName);
+    
+    topRow.appendChild(contractInfo);
+    topRow.appendChild(amount);
+    
+    infoRow.appendChild(userShare);
+    infoRow.appendChild(date);
+    
+    progressContainer.appendChild(progressBar);
+    
+    bottomRow.appendChild(infoRow);
+    bottomRow.appendChild(progressContainer);
+    
+    item.appendChild(topRow);
+    item.appendChild(bottomRow);
+    
+    return item;
+  },
+  
+  // Update payment item
+  updatePaymentItem: function(item, payment) {
+    // Get contract
+    const contract = SplMockData.getContractById ? 
+      SplMockData.getContractById(payment.contractId) : 
+      SplMockData.contracts.find(c => c.id === payment.contractId);
+      
+    if (!contract) return;
+    
+    // Find elements
+    const contractName = item.querySelector('.payment-contract-name');
+    const amount = item.querySelector('.payment-amount');
+    const date = item.querySelector('.payment-date');
+    const progressBar = item.querySelector('.payment-progress');
+    
+    // Update content
+    if (contractName) {
+      contractName.textContent = contract.title;
+    }
+    
+    if (amount) {
+      amount.textContent = SplFormatting.formatCurrency(payment.amount, payment.currency);
+    }
+    
+    if (date) {
+      date.textContent = `Expected: ${SplFormatting.formatDate(payment.date)}`;
+    }
+    
+    if (progressBar) {
+      // Update progress
+      const now = new Date();
+      const paymentDate = new Date(payment.date);
+      const daysDiff = Math.round((paymentDate - now) / (1000 * 60 * 60 * 24));
+      const progressPercent = Math.max(0, Math.min(100, (30 - daysDiff) / 30 * 100));
+      
+      progressBar.style.width = `${progressPercent}%`;
+    }
+  }
+};
