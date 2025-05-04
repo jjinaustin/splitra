@@ -50,29 +50,3 @@ document.addEventListener('DOMContentLoaded', function() {
   SplDashboard.initialize();
 });
 
-// Debug code to check if all necessary objects are loaded
-document.addEventListener('DOMContentLoaded', function() {
-  console.log('DOM content loaded');
-  console.log('SplConfig available:', typeof SplConfig !== 'undefined');
-  console.log('SplMockData available:', typeof SplMockData !== 'undefined');
-  console.log('SplFormatting available:', typeof SplFormatting !== 'undefined');
-  console.log('SplUI available:', typeof SplUI !== 'undefined');
-  console.log('SplStats available:', typeof SplStats !== 'undefined');
-  
-  // Check if data is available
-  if (typeof SplMockData !== 'undefined') {
-    console.log('User balance:', SplMockData.user.balance);
-  }
-  
-  // Force direct DOM updates for testing
-  setTimeout(function() {
-    console.log('Attempting direct DOM updates');
-    const balanceElement = document.querySelector('.stat-value-balance');
-    if (balanceElement) {
-      balanceElement.textContent = '3.45 ETH';
-      console.log('Directly updated balance element');
-    } else {
-      console.log('Could not find balance element for direct update');
-    }
-  }, 1000);
-});
