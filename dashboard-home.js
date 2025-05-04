@@ -260,11 +260,12 @@ const SplUtils = {
   formatCurrency: function(value, currency = SPLITRA_CONFIG.defaultCurrency) {
     if (typeof value !== 'number') return '0';
     
-    if (currency === 'ETH') {
-      return value.toFixed(5) + ' ETH';
-    } else if (currency === 'USD') {
-      return '// Splitra Dashboard Implementation - FIXED VERSION
-// This script integrates with your existing Webflow structure
+if (currency === 'ETH') {
+  return value.toFixed(5) + ' ETH';
+} else if (currency === 'USD') {
+  return `// Splitra Dashboard Implementation - FIXED VERSION
+// This script integrates with your existing Webflow structure`;
+}
 
 // First, load Chart.js if not already loaded
 (function loadChartJs() {
