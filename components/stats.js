@@ -1,4 +1,4 @@
-// Stats component - Balance, Contracts, Collaborators stats
+// Updated Stats component with more debugging and direct DOM manipulation
 const SplStats = {
   // Initialize stats cards
   initialize: function() {
@@ -10,48 +10,49 @@ const SplStats = {
     const activeContractsElement = document.querySelector('.stat-value-active');
     const collaboratorsElement = document.querySelector('.stat-value-collab');
     
-    // Find monthly values
-    const balanceMonthlyElement = document.querySelector('.user-balance-value');
-    const totalContractsMonthlyElement = document.querySelector('.total-contracts-value');
-    const activeContractsMonthlyElement = document.querySelector('.active-contracts-value');
-    const collaboratorsMonthlyElement = document.querySelector('.active-collaborators-value');
+    // Debug logging to verify elements were found
+    SplUI.log('Balance element found:', balanceElement !== null);
+    SplUI.log('Total contracts element found:', totalContractsElement !== null);
+    SplUI.log('Active contracts element found:', activeContractsElement !== null);
+    SplUI.log('Collaborators element found:', collaboratorsElement !== null);
     
-    // Update with mock data
+    // Log the current values before updating
+    if (balanceElement) SplUI.log('Current balance text:', balanceElement.textContent);
+    if (totalContractsElement) SplUI.log('Current total contracts text:', totalContractsElement.textContent);
+    
+    // Update with mock data using direct innerHTML assignment
     if (balanceElement) {
-      balanceElement.textContent = SplFormatting.formatCurrency(SplMockData.user.balance);
+      balanceElement.innerHTML = SplFormatting.formatCurrency(SplMockData.user.balance);
+      SplUI.log('Updated balance to:', SplFormatting.formatCurrency(SplMockData.user.balance));
     }
     
     if (totalContractsElement) {
-      totalContractsElement.textContent = SplMockData.user.totalContracts.toString();
+      totalContractsElement.innerHTML = SplMockData.user.totalContracts.toString();
+      SplUI.log('Updated total contracts to:', SplMockData.user.totalContracts.toString());
     }
     
     if (activeContractsElement) {
-      activeContractsElement.textContent = SplMockData.user.activeContracts.toString();
+      activeContractsElement.innerHTML = SplMockData.user.activeContracts.toString();
+      SplUI.log('Updated active contracts to:', SplMockData.user.activeContracts.toString());
     }
     
     if (collaboratorsElement) {
-      collaboratorsElement.textContent = SplMockData.user.activeCollaborators.toString();
+      collaboratorsElement.innerHTML = SplMockData.user.activeCollaborators.toString();
+      SplUI.log('Updated collaborators to:', SplMockData.user.activeCollaborators.toString());
     }
     
-    // Update monthly values if they exist
-    const monthlyValue = '1.2 ETH this month.'; // Mock monthly value
-    
-    if (balanceMonthlyElement) {
-      balanceMonthlyElement.textContent = monthlyValue;
+    // Try with direct document.getElementById for additional targeting options
+    // In case the Webflow generated IDs are more reliable
+    try {
+      const balanceByID = document.querySelector('#stat-value-balance');
+      if (balanceByID) {
+        balanceByID.innerHTML = SplFormatting.formatCurrency(SplMockData.user.balance);
+        SplUI.log('Updated balance by ID');
+      }
+    } catch (e) {
+      SplUI.log('No element with ID stat-value-balance');
     }
     
-    if (totalContractsMonthlyElement) {
-      totalContractsMonthlyElement.textContent = monthlyValue;
-    }
-    
-    if (activeContractsMonthlyElement) {
-      activeContractsMonthlyElement.textContent = monthlyValue;
-    }
-    
-    if (collaboratorsMonthlyElement) {
-      collaboratorsMonthlyElement.textContent = monthlyValue;
-    }
-    
-    SplUI.log('Stats cards initialized');
+    SplUI.log('Stats cards initialization completed');
   }
 };
